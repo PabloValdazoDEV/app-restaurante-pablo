@@ -1,0 +1,55 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url = env("DATABASE_URL")
+    // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+enum Role{
+    EMPLOYE
+    CLIENT
+}
+enum Status{
+    ENTRADA
+    COCINA
+    RECOGER
+    ENTREGADO
+}
+
+model Session {
+  sid     String   @id @db.VarChar(255) // Session ID
+  sess    Json     // Session data stored as JSON
+  expire  DateTime // Expiration date of the session
+}
+
+
+model User{
+    id String @id @default(uuid())
+    username String @unique
+    password String
+    rolE Role @default(CLIENT)
+    createdAt DateTime @default(now())
+    updateAt DateTime @updatedAt
+}
+
+model Order{
+    id  String @id @default(uuid())
+    numberOrden Int @default(autoincrement())
+    status Status @default(ENTRADA)
+    createdAt DateTime @default(now())
+    updateAt DateTime @updatedAt
+    product Product[] @relation("orderProducts")
+
+}
+
+model Product{
+    id String @id @default(uuid())
+    imagen String?
+    name String
+    price Int 
+    order Order? @relation("orderProducts", fields: [id_order], references: [id])
+    id_order String?
+}
