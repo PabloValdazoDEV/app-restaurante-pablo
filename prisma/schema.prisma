@@ -9,8 +9,8 @@ datasource db {
 }
 
 enum Role{
-    EMPLOYE
-    CLIENT
+    ADMIN
+    EMPLOYER
 }
 enum Status{
     ENTRADA
@@ -30,7 +30,7 @@ model User{
     id String @id @default(uuid())
     username String @unique
     password String
-    rolE Role @default(CLIENT)
+    role Role @default(EMPLOYER)
     createdAt DateTime @default(now())
     updateAt DateTime @updatedAt
 }
@@ -38,11 +38,11 @@ model User{
 model Order{
     id  String @id @default(uuid())
     numberOrden Int @default(autoincrement())
+    email String @unique
     status Status @default(ENTRADA)
     createdAt DateTime @default(now())
     updateAt DateTime @updatedAt
     product Product[] @relation("orderProducts")
-
 }
 
 model Product{
