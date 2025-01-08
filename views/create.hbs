@@ -1,0 +1,9 @@
+<h2>Crear Usuario</h2>
+<form action="/auth/create" method="post">
+{{> form}}
+<select name="role" id="role">
+    <option value="EMPLOYER">Employer</option>
+    <option value="ADMIN">Admin</option>
+</select>
+<button type="submit">Crear</button>
+</form>

@@ -32,24 +32,34 @@ model User{
     password String
     role Role @default(EMPLOYER)
     createdAt DateTime @default(now())
-    updateAt DateTime @updatedAt
+    updatedAt DateTime @updatedAt
 }
 
 model Order{
     id  String @id @default(uuid())
-    numberOrden Int @default(autoincrement())
-    email String @unique
+    orderNumber Int @default(autoincrement())
+    email String
     status Status @default(ENTRADA)
     createdAt DateTime @default(now())
     updateAt DateTime @updatedAt
-    product Product[] @relation("orderProducts")
+    products OrderProduct[]
 }
 
 model Product{
     id String @id @default(uuid())
-    imagen String?
+    imagen String
     name String
     price Int 
-    order Order? @relation("orderProducts", fields: [id_order], references: [id])
-    id_order String?
+    stock Int
+    description String
+    orders OrderProduct[]
+}
+
+model OrderProduct{
+    id         String  @id @default(uuid())
+    orderId    String
+    productId  String
+    quantity   Int
+    order      Order   @relation(fields: [orderId], references: [id])
+    product    Product @relation(fields: [productId], references: [id])
 }
