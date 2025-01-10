@@ -1,0 +1,25 @@
+<h1>Editar Product</h1>
+<form action="/order/stock/edit/{{product.id}}?_method=PUT" method="POST" enctype="multipart/form-data">
+    <div>
+        <label for="name">Nombre</label>
+        <input id="name" name="name" type="text" value="{{product.name}}" required>
+    </div>
+    <div>
+        <label for="image">Imagen</label>
+        <img src="{{product.imagen.url}}" alt="Imagen actual" width="200px">
+        <input id="image" name="image" type="file" accept="image/*">
+    </div>
+    <div>
+        <label for="price">Precio</label>
+        <input id="price" name="price" type="number" min="0" step="0.01"  value="{{product.price}}" required>
+    </div>
+    <div>
+        <label for="stock">Stock</label>
+        <input id="stock" name="stock" type="number" min="1" step="1" value="{{product.stock}}" required>
+    </div>
+    <div>
+        <label for="description">Descripción</label>
+        <textarea id="description" name="description" type="" required>{{product.description}}</textarea>
+    </div>
+    <button type="submit">Editar Producto</button>
+</form> 

@@ -43,11 +43,12 @@ model Order{
     createdAt DateTime @default(now())
     updateAt DateTime @updatedAt
     products OrderProduct[]
+    description String?
 }
 
 model Product{
     id String @id @default(uuid())
-    imagen String
+    imagen Json
     name String
     price Int 
     stock Int

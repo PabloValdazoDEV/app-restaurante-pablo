@@ -14,6 +14,8 @@ const hbs = create({
     partialsDir: 'views/partials',
     helpers: require('./utils/helpers')
 });
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 require('dotenv').config();
 
 app.use(express.json());

@@ -1,1 +1,13 @@
 <h1>Stock</h1>
+<h3>Lista de todos los productos</h3>
+{{#each products}}
+<ul>
+    <li>{{name}}</li>
+    <li><img src="{{imagen.url}}" width="200px" alt="imagen"></li>
+    <li>{{price}}€</li>
+    <li>{{stock}}</li>
+    <li>{{description}}</li>
+</ul>
+<a href="/order/stock/edit/{{id}}">Editar</a>
+<a href="/order/stock/delete/{{id}}">Borrar</a>
+{{/each}}
