@@ -5,6 +5,8 @@ const upload = multer({ dest: 'uploads/' });
 const router = express.Router();
 const cloudinary = require('../config/cloudinary')
 const prisma = require('../prisma/prisma')
+
+
 router.get('/queue', (req, res)=>{
     try {
         res.render('queue',{
@@ -35,10 +37,10 @@ router.get('/stock/create', isAdmin,(req, res)=>{
 })
 
 router.post('/stock/create', upload.single('image'), async(req, res)=>{
-    const { name, price, stock, description } = req.body
+    const { name, price, stock, description, imagen } = req.body
     try {
         const result = await cloudinary.uploader.upload(req.file.path)
-        const result_product = await prisma.product.create({
+        await prisma.product.create({
             data:{
                 name,
                 imagen: {
@@ -75,21 +77,18 @@ router.get('/stock/edit/:id', async(req, res)=>{
     }
 })
 
-router.put('/stock/edit/:id', async (req, res)=>{
-    console.log('req.body:', req.body);
-    console.log('req.file:', req.file);
+router.put('/stock/edit/:id', upload.single('image'), async (req, res)=>{
     const id_product = req.params.id
-    const { name, price, stock, description, imagen } = req.body
+    const { name, price, stock, description } = req.body
 try {
     const find_image = await prisma.product.findUnique({
         where:{
             id: id_product
         }
     })
-    console.log(find_image)
     if(req.file){
         const result = await cloudinary.uploader.upload(req.file.path)
-        const update_product = await prisma.product.update({
+        await prisma.product.update({
             where:{
                 id: id_product
             },
@@ -125,8 +124,29 @@ try {
     res.redirect('/order/stock')
 } catch (error) {
     console.error(error)
-    res.status(500).redirect('error-404')
+    res.status(500).redirect('/error-404')
 }
+})
+
+router.delete('/stock/delete/:id', async(req, res)=>{
+    const id_product = req.params.id
+    try {
+        const find_image = await prisma.product.findUnique({
+            where:{
+                id: id_product
+            }
+        })
+        cloudinary.uploader.destroy(find_image.imagen.public_id, function(result) { console.log(result) });
+        await prisma.product.delete({
+            where: {
+                id: id_product
+            }
+        })
+        res.redirect('/order/stock')
+    } catch (error) {
+        console.error(error)
+        res.status(500).redirect('/error-404')
+    }
 })
 
 

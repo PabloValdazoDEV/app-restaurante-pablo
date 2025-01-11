@@ -8,6 +8,8 @@
     <li>{{stock}}</li>
     <li>{{description}}</li>
 </ul>
+<form action="/order/stock/delete/{{id}}?_method=DELETE" method="post">
+    <button type="submit">Borrar</button>
+</form>
 <a href="/order/stock/edit/{{id}}">Editar</a>
-<a href="/order/stock/delete/{{id}}">Borrar</a>
 {{/each}}

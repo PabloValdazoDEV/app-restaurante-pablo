@@ -4,7 +4,7 @@ const isAuthenticated = require('../middelware/isAuthenticated')
 
 const auth = require('./auth')
 const order = require('./order')
-const qr = require('./qr')
+const carta = require('./carta')
 
 router.get('/error-404', (req, res)=>{
 res.render('error-404',{
@@ -12,7 +12,7 @@ res.render('error-404',{
 })
 })
 
-router.use('/qr', qr)
+router.use('/carta', carta)
 router.use('/auth', auth)
 // router.use('/',isAuthenticated)
 // router.use('/order', isAuthenticated)

@@ -1,1 +1,77 @@
 <h1>Carta</h1>
+<form action="/carta/crear-pedido" method="post" id="prueba">
+<label for="email">Email</label>
+    <input type="email" name="email" id="email" required>
+
+{{#each products}}
+<div class="product-item">
+  <ul>
+      <li>{{name}}</li>
+      <li><img src="{{imagen.url}}" width="200px" alt="imagen"></li>
+      <li>{{price}}€</li>
+      <li>{{description}}</li>
+  </ul>
+  <div class="quantity-control">
+      <button type="button" class="decrement" data-index="{{id}}">-</button>
+      <span class="quantity" id="quantity-{{id}}">0</span>
+      <button type="button" class="increment" data-index="{{id}}">+</button>
+  </div>
+</div>
+{{/each}}
+<div>
+    <label for="description">Algun comentario</label><br>
+<textarea name="description" id="description"></textarea>
+</div>
+<input type="hidden" name="quantityAll" id="quantityAll" required>
+<button type="submit">enviar</button>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const decrementButtons = document.querySelectorAll(".decrement");
+  const incrementButtons = document.querySelectorAll(".increment");
+
+  decrementButtons.forEach((button) => {
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
+      const index = button.getAttribute("data-index");
+      const quantityElement = document.querySelector(`#quantity-${index}`);
+      let currentQuantity = parseInt(quantityElement.textContent);
+      if (currentQuantity > 0) {
+        quantityElement.textContent = currentQuantity - 1;
+      }
+    });
+  });
+
+  incrementButtons.forEach((button) => {
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
+      const index = button.getAttribute("data-index");
+      const quantityElement = document.querySelector(`#quantity-${index}`);
+      let currentQuantity = parseInt(quantityElement.textContent);
+      quantityElement.textContent = currentQuantity + 1;
+    });
+  });
+
+
+  document.getElementById('prueba').addEventListener('submit', function(e) {
+    const quantities = [];
+
+    document.querySelectorAll('.quantity').forEach((quantityElement) => {
+      const productIndex = quantityElement.id.replace('quantity-','');
+      quantities.push({
+        id: productIndex,
+        quantity: +quantityElement.textContent
+      })
+    
+    });
+
+    console.log("Cantidades enviadas:", quantities);
+    const quantitiesFilter = quantities.filter((product)=>{
+        return product.quantity > 0
+    })
+     console.log("Cantidades enviadas:", quantitiesFilter);
+   document.getElementById('quantityAll').value = JSON.stringify(quantitiesFilter);
+  });
+});
+</script>

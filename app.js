@@ -16,6 +16,7 @@ const hbs = create({
 });
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 app.use(express.json());
