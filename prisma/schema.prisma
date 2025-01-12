@@ -50,7 +50,7 @@ model Product{
     id String @id @default(uuid())
     imagen Json
     name String
-    price Int 
+    price Float 
     stock Int
     description String
     orders OrderProduct[]

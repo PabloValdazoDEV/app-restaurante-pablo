@@ -1,6 +1,13 @@
 <h1>Info</h1>
 
+    <p>Estado el pedido: {{pedido.status}}</p>
+    <p>Email asociado al pedido: {{pedido.email}}</p>
+
+
+<p>Has pedido:</p>
 <ul>
-    <li>{{pedido.status}}</li>
-    <li>{{pedido.email}}</li>
+    {{#each pedido.products}}
+    <li>{{product.name}} - Cant. {{quantity}} - {{product.price}}€ /ud</li>
+    {{/each}}
 </ul>
+<p>Total a pagar: <b>{{total}}€</b></p>
