@@ -1,0 +1,83 @@
+<h1>Editar usuario</h1>
+
+<form action="/auth/users/{{user.id}}?_method=PUT" method="post">
+    <div>
+
+        <label for="username">Nombre</label>
+        <input type="text" name="username" id="username" value="{{user.username}}" required>
+    </div>
+    <div>
+
+        <label for="role">Role</label>
+        <select name="role" id="role" required>
+            <option value="{{user.role}}">{{user.role}}</option>
+            <option value="{{otherRole}}">{{otherRole}}</option>
+        </select>
+    </div>
+
+    <button type="submit">Actualizar</button>
+
+</form>
+
+<button id="btnPassword">Cambiar Contraseña</button>
+
+<form action="/auth/users/password/{{user.id}}?_method=PUT" method="post" id="formPassword" style="display: none">
+    <div>
+
+        <label for="password">Contraseña Actual</label>
+        <input type="password" name="password" id="password" required>{{#if error}}Contraseña incorrecta{{/if}}
+
+    </div>
+    <div>
+
+        <label for="passwordNew">Nueva Contraseña</label>
+        <input type="password" name="passwordNew" id="passwordNew" required>
+    </div>
+    <div>
+
+        <label for="passwordNewRep">Repite la Contraseña</label>
+        <input type="password" name="passwordNewRep" id="passwordNewRep" required>
+    </div>
+
+    <button type="submit" id="botonContrasena" disabled>Cambiar Contraseña</button>
+
+</form>
+
+<script>
+
+    const btnCambiarContrasena = document.getElementById('btnPassword')
+    const formCambiarContrasena = document.getElementById('formPassword')
+
+     const error = JSON.stringify({{error}});
+
+    if (error) {
+        mostrarFormulatio();
+    }
+
+    function mostrarFormulatio() {
+        formCambiarContrasena.style.display = 'block'
+        btnCambiarContrasena.style.display = 'none'
+    }
+
+    btnCambiarContrasena.addEventListener('click', mostrarFormulatio)
+
+    const botonContrasena = document.getElementById('botonContrasena')
+
+
+formCambiarContrasena.addEventListener('input', ()=>{
+    let newContrasena = document.getElementById('passwordNew').value
+    let newContrasenaRep = document.getElementById('passwordNewRep').value
+
+    const regex = /^(?=.*[A-Z]).{7,}$/;
+
+
+    if (regex.test(newContrasena) && newContrasena === newContrasenaRep) {
+        botonContrasena.removeAttribute('disabled');
+    } else {
+        botonContrasena.setAttribute('disabled', 'true');
+    }
+})
+
+</script>
+
+{{!-- Actualizar Contraseña --}}

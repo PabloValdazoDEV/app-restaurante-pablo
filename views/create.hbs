@@ -1,9 +1,27 @@
 <h2>Crear Usuario</h2>
-<form action="/auth/create" method="post">
+<form action="/auth/create" method="post" id="form">
 {{> form}}
 <select name="role" id="role">
     <option value="EMPLOYER">Employer</option>
     <option value="ADMIN">Admin</option>
 </select>
-<button type="submit">Crear</button>
+<button id="btnCreate" type="submit" disabled>Crear</button>
 </form>
+
+<script>
+    const btn = document.getElementById('btnCreate')
+    document.getElementById('form').addEventListener('input', ()=>{
+    let username = document.getElementById('username').value
+    let password = document.getElementById('password').value
+
+    const regex = /^(?=.*[A-Z]).{7,}$/;
+
+
+    if (regex.test(password) && username && password) {
+        btn.removeAttribute('disabled');
+    } else {
+        btn.setAttribute('disabled', 'true');
+    }
+})
+
+</script>

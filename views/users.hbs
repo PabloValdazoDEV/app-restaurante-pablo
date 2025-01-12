@@ -1,1 +1,8 @@
 <h1>Users</h1>
+
+
+{{#each users}}
+
+<p>{{username}} <a href="/auth/users/{{id}}">Editar</a><form action="/auth/users/delete/{{id}}?_method=DELETE" method="post"><button type="submit">Eliminar</button></form></p>
+
+{{/each}}

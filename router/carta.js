@@ -28,7 +28,7 @@ router.post('/crear-pedido', async (req, res)=>{
                 status: 'ENTREGADO'
             }
         })
-        if(pedidosTotales.length >= 16){
+        if(pedidosTotales.length >= 11){
             return res.status(500).redirect('/carta/maximos-pedidos')
         }
 
