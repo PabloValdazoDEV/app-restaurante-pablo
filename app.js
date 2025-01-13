@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
-
+global.tableUpdated = false;
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: process.env.DATABASE_SSL === 'true'
@@ -43,6 +43,7 @@ const pool = new Pool({
     },
   })
 );
+
 
 app.use(morgan('dev'));
 app.use(passport.initialize());

@@ -1,7 +1,9 @@
 const express = require('express');
 const prisma = require('../prisma/prisma');
 const transporter = require('../config/nodemailer');
+const { domain } = require('../config/config');
 const router = express.Router();
+
 require('dotenv').config();
 
 router.get('/', async (req, res)=>{
@@ -48,7 +50,6 @@ router.post('/crear-pedido', async (req, res)=>{
             }
         })
 
-        
         const pedido = await prisma.order.findUnique({
             where:{
                 id: newOrder.id
@@ -62,27 +63,42 @@ router.post('/crear-pedido', async (req, res)=>{
             }
             
         })
-        
-        console.log(pedido)
 
         const mailOptions = {
-            from: process.env.GMAIL_USER,
+            from: `App Restaurante <${process.env.GMAIL_USER}>`,
             to: email,
-            subject: 'App Restaurante',
-            text: 'Pedido realizado ',
-            html:`
-            <h1>Pedido realizado</h1><br>
-            <h3>Tu pedido esta en ${pedido.status === 'ENTRADA' ? '25 minutos': "15 minutos"}</h3>
-            <p>Has pedido:</p>
-            <ul>
-            ${pedido.products.map(el => `<li>${el.product.name} - Cant. ${el.quantity} - ${el.product.price}€ /ud</li>`).join('')}
-            </ul>
-            <p>Total a pagar: <b>${pedido.products.reduce((acc, value)=> acc + (value.quantity * value.product.price),0)}€</b></p>
-            <p>Para más información sobre tu pedido, haz <a href="http://localhost:3000/carta/info-pedido/${pedido.id}">click aquí</a></p>
+            subject: 'Tu Pedido Está en Camino 🍽️',
+            text: 'Pedido realizado 📋',
+            html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
+                <h1 style="text-align: center; color: #ff5722;">¡Gracias por tu pedido! 🍽️</h1>
+                <p style="font-size: 16px; color: #333; text-align: center;">Tu pedido estará listo en <strong>25 minutos</strong>.</p>
+                
+                <h3 style="color: #ff5722;">Resumen de tu pedido:</h3>
+                <ul style="list-style-type: none; padding: 0;">
+                    ${pedido.products.map(el => `
+                        <li style="margin-bottom: 10px; padding: 10px; border-bottom: 1px solid #eee;">
+                            <span style="font-weight: bold;">${el.product.name}</span><br>
+                            Cantidad: ${el.quantity} | Precio: ${el.product.price}€/ud
+                        </li>`).join('')}
+                </ul>
+                
+                <p style="font-size: 18px; color: #333;"><strong>Total a pagar: <span style="color: #ff5722;">${pedido.products.reduce((acc, value) => acc + (value.quantity * value.product.price), 0)}€</span></strong></p>
+                
+                <div style="text-align: center; margin: 20px 0;">
+                    <a href="${domain}/carta/info-pedido/${pedido.id}" style="display: inline-block; padding: 10px 20px; background-color: #ff5722; color: white; text-decoration: none; border-radius: 5px; font-size: 16px;">
+                        Ver Detalles del Pedido
+                    </a>
+                </div>
+        
+                <p style="text-align: center; font-size: 14px; color: #777;">Si tienes alguna duda, no dudes en contactarnos. ¡Buen provecho! 😊</p>
+            </div>
             `
-        }
+        };
+        
 
        await transporter.sendMail(mailOptions);
+       global.tableUpdated = true
         res.redirect(`/carta/info-pedido/${newOrder.id}`)
     } catch (error) {
         console.error(error)

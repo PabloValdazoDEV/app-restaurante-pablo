@@ -14,10 +14,10 @@ passport.use(new LocalStrategy(
       if (!user) {
         return done(null, false, { message: 'Usuario no encontrado' });
       }
-      if(!regex.test(password)){
+      if(!regex.test(password.trim())){
         return done(null, false, { message: 'Contraseña insegura' });
       }
-      const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = await bcrypt.compare(password.trim(), user.password);
       if (!isMatch) {
         return done(null, false, { message: 'Contraseña incorrecta' });
       }

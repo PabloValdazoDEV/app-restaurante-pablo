@@ -6,3 +6,9 @@
     <label for="password">Password: </label>
     <input id="password" type="password" name="password" required>
 </div>
+
+<script>
+    document.getElementById('password').addEventListener('input', ()=>{
+         document.getElementById('password').value = document.getElementById('password').value.trim()
+    })
+</script>

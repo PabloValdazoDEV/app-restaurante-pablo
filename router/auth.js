@@ -20,10 +20,10 @@ router.post("/create", isAdmin, async (req, res) => {
   const { username, password, role } = req.body;
   const regex = /^(?=.*[A-Z]).{7,}$/;
   try {
-    if (!regex.test(password) && !username && !password) {
+    if (!regex.test(password.trim()) && !username && !password) {
         res.status(500);
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password.trim(), 10);
 
     await prisma.user.create({
       data: {

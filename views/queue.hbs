@@ -1,1 +1,80 @@
 <h1>Cola de pedidos</h1>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr);grid-gap: 10px; grid-auto-rows: minmax(auto, auto)">
+
+
+<div style="background-color: rgb(71, 146, 199, 0.333);">
+    <h2 style="text-align: center;">Entrada</h2>
+    {{#each pedidoEntrada}}
+    <ul>
+    <p>Pedido Nº {{orderNumber}}</p>
+
+    {{#each products}}
+        <li>{{product.name}} - Cantidad {{quantity}}</li>
+    {{/each}}
+    </ul>
+    {{#if description}}
+    <p>Comentario del cliente: {{description}}</p>
+    {{/if}}
+    <form action="/order/queue/a-cocina?_method=PUT" method="post"><input type="hidden" name="id" value="{{id}}"><button type="submit">Pasa a Cocina</button></form>
+    <br>
+    {{/each}}
+</div>
+
+
+<div style="background-color:rgba(211, 59, 59, 0.333);">
+        <h2 style="text-align: center;">Cocina</h2>
+    {{#each pedidoCocina}}
+    <ul>
+    <p>Pedido Nº {{orderNumber}}</p>
+
+    {{#each products}}
+        <li>{{product.name}} - Cantidad {{quantity}}</li>
+    {{/each}}
+    </ul>
+    {{#if description}}
+    <p>Comentario del cliente: {{description}}</p>
+    {{/if}}
+    <form action="/order/queue/a-recoger?_method=PUT" method="post"><input type="hidden" name="id" value="{{id}}"><button type="submit">Listo para Recoger</button></form>
+    <br>
+    {{/each}}
+</div>
+
+
+<div style="background-color: rgba(68, 165, 83, 0.333);">
+        <h2 style="text-align: center;">Recoger</h2>
+       {{#each pedidoRecoger}}
+    <ul>
+    <p>Pedido Nº {{orderNumber}}</p>
+
+    {{#each products}}
+        <li>{{product.name}} - Cantidad {{quantity}}</li>
+    {{/each}}
+    </ul>
+    {{#if description}}
+    <p>Comentario del cliente: {{description}}</p>
+    {{/if}}
+    <form action="/order/queue/terminado?_method=PUT" method="post"><input type="hidden" name="id" value="{{id}}"><button type="submit">Cerrar Pedido</button></form>
+    <br>
+    {{/each}}
+
+</div>
+
+
+</div>
+
+<script>
+    async function checkForTableUpdates() {
+        try {
+            const response = await fetch('/order/check-table');
+            const data = await response.json();
+
+            if (data.updated) {
+                location.reload();
+            }
+        } catch (error) {
+        }
+    }
+
+    setInterval(checkForTableUpdates, 7500);
+</script>
