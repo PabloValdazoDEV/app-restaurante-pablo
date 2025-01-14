@@ -11,6 +11,16 @@
       <li>{{price}}€</li>
       <li>{{description}}</li>
   </ul>
+
+
+    {{#each ../sinStock}}
+        {{#ifEquals id ../id}}
+            <p>Producto con stock insuficiente</p>
+        {{/ifEquals}}
+    {{/each}}
+
+
+
   <div class="quantity-control">
       <button type="button" class="decrement" data-index="{{id}}">-</button>
       <span class="quantity" id="quantity-{{id}}">0</span>
@@ -27,6 +37,7 @@
 </form>
 
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
   const decrementButtons = document.querySelectorAll(".decrement");
   const incrementButtons = document.querySelectorAll(".increment");

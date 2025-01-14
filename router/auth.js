@@ -45,10 +45,7 @@ router.get("/login", isLogin, (req, res) => {
   });
 });
 
-router.post(
-  "/login",
-  isLogin,
-  passport.authenticate("local", {
+router.post("/login",isLogin, passport.authenticate("local", {
     successRedirect: "/order/queue",
     failureRedirect: "/auth/logout",
     failureFlash: false,
@@ -82,7 +79,7 @@ router.get("/users", isAdmin, async (req, res) => {
   }
 });
 
-router.get('/users/:id', async (req, res)=>{
+router.get('/users/:id', isAdmin, async (req, res)=>{
     const { id } = req.params
     try {
         const userEdit = await prisma.user.findUnique({
@@ -102,7 +99,7 @@ router.get('/users/:id', async (req, res)=>{
     }
 })
 
-router.put('/users/:id', async (req, res)=>{
+router.put('/users/:id', isAdmin, async (req, res)=>{
     const { id } = req.params
     const { username, role } = req.body
     try {
@@ -122,7 +119,7 @@ router.put('/users/:id', async (req, res)=>{
     }
 })
 
-router.put('/users/password/:id', async (req, res)=>{
+router.put('/users/password/:id', isAdmin, async (req, res)=>{
     const { id } = req.params
     const { password, passwordNew, passwordNewRep } = req.body
     try {
@@ -159,7 +156,7 @@ router.put('/users/password/:id', async (req, res)=>{
     }
 })
 
-router.delete('/users/delete/:id', async(req, res)=>{
+router.delete('/users/delete/:id', isAdmin, async(req, res)=>{
     const { id } = req.params
     try {
         await prisma.user.delete({where : { id }})

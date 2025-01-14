@@ -14,8 +14,8 @@ res.render('error-404',{
 
 router.use('/carta', carta)
 router.use('/auth', auth)
-// router.use('/',isAuthenticated)
-// router.use('/order', isAuthenticated)
+router.use('/',isAuthenticated)
+router.use('/order', isAuthenticated)
 router.use('/order', order)
 
 module.exports = router

@@ -7,9 +7,10 @@ const cloudinary = require('../config/cloudinary')
 const prisma = require('../prisma/prisma')
 const transporter = require('../config/nodemailer');
 const { domain } = require('../config/config');
+const isAuthenticated = require('../middelware/isAuthenticated');
 require('dotenv').config();
 
-router.get('/queue', async (req, res)=>{
+router.get('/queue', isAuthenticated, async (req, res)=>{
     try {
         const pedidos = await prisma.order.findMany({
             include:{
@@ -39,7 +40,7 @@ router.get('/queue', async (req, res)=>{
     }
 })
 
-router.put('/queue/a-cocina', async (req, res)=>{
+router.put('/queue/a-cocina', isAuthenticated, async (req, res)=>{
     const { id } = req.body
     console.log(id)
     try {
@@ -87,7 +88,8 @@ router.put('/queue/a-cocina', async (req, res)=>{
     }
 
 })
-router.put('/queue/a-recoger', async (req, res)=>{
+
+router.put('/queue/a-recoger', isAuthenticated, async (req, res)=>{
     const { id } = req.body
     try {
         const cliente = await prisma.order.findUnique({where:{id}})
@@ -135,7 +137,8 @@ router.put('/queue/a-recoger', async (req, res)=>{
     }
 
 })
-router.put('/queue/terminado', async (req, res)=>{
+
+router.put('/queue/terminado', isAuthenticated, async (req, res)=>{
     const { id } = req.body
     console.log(id)
     try {
@@ -206,7 +209,7 @@ router.get('/stock/create', isAdmin,(req, res)=>{
     })
 })
 
-router.post('/stock/create', upload.single('image'), async(req, res)=>{
+router.post('/stock/create', isAdmin, upload.single('image'), async(req, res)=>{
     const { name, price, stock, description, imagen } = req.body
     try {
         const result = await cloudinary.uploader.upload(req.file.path)
@@ -229,7 +232,7 @@ router.post('/stock/create', upload.single('image'), async(req, res)=>{
     }
 })
 
-router.get('/stock/edit/:id', async(req, res)=>{
+router.get('/stock/edit/:id', isAdmin, async(req, res)=>{
     const id_product = req.params.id
     try {
         const find_product = await prisma.product.findUnique({
@@ -247,7 +250,7 @@ router.get('/stock/edit/:id', async(req, res)=>{
     }
 })
 
-router.put('/stock/edit/:id', upload.single('image'), async (req, res)=>{
+router.put('/stock/edit/:id', isAdmin, upload.single('image'), async (req, res)=>{
     const id_product = req.params.id
     const { name, price, stock, description } = req.body
 try {
@@ -298,7 +301,7 @@ try {
 }
 })
 
-router.delete('/stock/delete/:id', async(req, res)=>{
+router.delete('/stock/delete/:id', isAdmin, async(req, res)=>{
     const id_product = req.params.id
     try {
         const find_image = await prisma.product.findUnique({
