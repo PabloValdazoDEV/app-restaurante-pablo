@@ -43,7 +43,6 @@ router.get('/queue', isAuthenticated, async (req, res)=>{
 
 router.put('/queue/a-cocina', isAuthenticated, async (req, res)=>{
     const { id } = req.body
-    console.log(id)
     try {
         const cliente = await prisma.order.findUnique({where:{id}})
         await prisma.order.update({ 
@@ -146,7 +145,6 @@ router.put('/queue/a-recoger', isAuthenticated, async (req, res)=>{
 
 router.put('/queue/terminado', isAuthenticated, async (req, res)=>{
     const { id } = req.body
-    console.log(id)
     try {
         const cliente = await prisma.order.findUnique({where:{id}})
         await prisma.order.update({ 
@@ -310,17 +308,67 @@ try {
 router.delete('/stock/delete/:id', isAdmin, async(req, res)=>{
     const id_product = req.params.id
     try {
+        const productoPedido = await prisma.product.findMany({
+            include:{
+                orders:{
+                    include:{
+                        order:true
+                    }
+                }
+            },where: {
+                AND: [
+                    {
+                        id: id_product,
+                    },
+                    {
+                        orders: {
+                            some: {
+                                productId: id_product, 
+                                order: {
+                                    status: {
+                                        in: ["ENTRADA", "COCINA", "RECOGER"], 
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        })
+
+        if (productoPedido.length > 0) {
+            throw new Error("El producto tiene pedidos en estado ENTRADA, COCINA o RECOGER.");
+        }
+
+
         const find_image = await prisma.product.findUnique({
             where:{
                 id: id_product
             }
         })
         cloudinary.uploader.destroy(find_image.imagen.public_id, function(result) { console.log(result) });
+        await prisma.orderProduct.deleteMany({
+            where: {
+                productId: id_product,
+            },
+        });
+
+        await prisma.order.deleteMany({
+            where: {
+                products: {
+                    some: {
+                        productId: id_product,
+                    },
+                },
+            },
+        });
+    
         await prisma.product.delete({
             where: {
-                id: id_product
-            }
-        })
+                id: id_product,
+            },
+        });
+        
         res.redirect('/order/stock')
     } catch (error) {
         console.error(error)
