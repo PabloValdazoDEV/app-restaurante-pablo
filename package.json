@@ -8,7 +8,7 @@
     "dev": "nodemon app.js",
     "seed": "node prisma/seed.js",
     "deploy": "npm install && npx prisma generate",
-    "dbpush": "npx prisma db pusgh"
+    "dbpush": "npx prisma db push"
   },
   "keywords": [],
   "author": "",

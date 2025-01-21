@@ -1,5 +1,5 @@
 const config = {
-    domain: 'http://localhost:3000',
+    domain: 'https://takayama.pablovaldazo.es/',
   };
   
   module.exports = config;

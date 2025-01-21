@@ -28,9 +28,10 @@ router.post("/crear-pedido", async (req, res) => {
   try {
     const pedidosTotales = await prisma.order.findMany({
       where: {
-        status: "ENTREGADO",
+        status: "ENTRADA",
       },
     });
+
     if (pedidosTotales.length >= 11) {
       return res.status(500).redirect("/carta/maximos-pedidos");
     }
@@ -114,41 +115,41 @@ router.post("/crear-pedido", async (req, res) => {
       subject: "Tu Pedido Está en Camino 🍽️",
       text: "Pedido realizado 📋",
       html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
-                <h1 style="text-align: center; color: #ff5722;">¡Gracias por tu pedido! 🍽️</h1>
-                <p style="font-size: 16px; color: #333; text-align: center;">Tu pedido estará listo en <strong>25 minutos</strong>.</p>
-                
-                <h3 style="color: #ff5722;">Resumen de tu pedido:</h3>
-                <ul style="list-style-type: none; padding: 0;">
-                    ${pedido.products
-                      .map(
-                        (el) => `
-                        <li style="margin-bottom: 10px; padding: 10px; border-bottom: 1px solid #eee;">
-                            <span style="font-weight: bold;">${el.product.name}</span><br>
-                            Cantidad: ${el.quantity} | Precio: ${el.product.price}€/ud
-                        </li>`
-                      )
-                      .join("")}
-                </ul>
-                
-                <p style="font-size: 18px; color: #333;"><strong>Total a pagar: <span style="color: #ff5722;">${pedido.products.reduce(
-                  (acc, value) => acc + value.quantity * value.product.price,
-                  0
-                )}€</span></strong></p>
-                
-                <div style="text-align: center; margin: 20px 0;">
-                    <a href="${domain}/carta/info-pedido/${
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
+              <h1 style="text-align: center; color: #E74C3C; font-size: 24px;">¡Gracias por tu pedido! 🍽️</h1>
+              <p style="font-size: 16px; color: #333; text-align: center; margin-bottom: 20px;">Tu pedido estará listo en <strong>25 minutos</strong>.</p>
+              
+              <h3 style="color: #E74C3C; border-bottom: 2px solid #E74C3C; padding-bottom: 5px;">Resumen de tu pedido:</h3>
+              <ul style="list-style-type: none; padding: 0; margin: 0;">
+                  ${pedido.products
+                    .map(
+                      (el) => `
+                      <li style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #fff;">
+                          <span style="font-weight: bold; font-size: 16px;">${el.product.name}</span><br>
+                          <span style="font-size: 14px;">Cantidad: ${el.quantity} | Precio: ${el.product.price}€/ud</span>
+                      </li>`
+                    )
+                    .join("")}
+              </ul>
+              
+              <p style="font-size: 18px; color: #333; text-align: center; margin: 20px 0;"><strong>Total a pagar: <span style="color: #E74C3C;">${pedido.products.reduce(
+                (acc, value) => acc + value.quantity * value.product.price,
+                0
+              )}€</span></strong></p>
+              
+              <div style="text-align: center; margin: 30px 0;">
+                  <a href="${domain}/carta/info-pedido/${
         pedido.id
-      }" style="display: inline-block; padding: 10px 20px; background-color: #ff5722; color: white; text-decoration: none; border-radius: 5px; font-size: 16px;">
-                        Ver Detalles del Pedido
-                    </a>
-                </div>
-        
-                <p style="text-align: center; font-size: 14px; color: #777;">Si tienes alguna duda, no dudes en contactarnos. ¡Buen provecho! 😊</p>
-            </div>
-            `,
-    };
-
+      }" style="display: inline-block; padding: 12px 25px; background-color: #E74C3C; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold;">
+                      Ver Detalles del Pedido
+                  </a>
+              </div>
+      
+              <p style="text-align: center; font-size: 14px; color: #777; margin-top: 20px;">Si tienes alguna duda, no dudes en contactarnos. ¡Buen provecho! 😊</p>
+          </div>
+      `,
+  };
+  
     await transporter.sendMail(mailOptions);
     global.tableUpdated = true;
     res.redirect(`/carta/info-pedido/${newOrder.id}`);

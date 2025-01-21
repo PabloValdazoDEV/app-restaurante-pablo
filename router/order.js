@@ -19,10 +19,11 @@ router.get('/queue', isAuthenticated, async (req, res)=>{
                         product:true
                     }
                 }
+            },orderBy:{
+                orderNumber: 'asc'
             }
         })
         const pedidoEntrada = pedidos.filter((pedEntre)=> pedEntre.status === "ENTRADA")
-        // console.log(pedidoEntrada[0])
         const pedidoCocina = pedidos.filter((pedCoc)=> pedCoc.status === "COCINA")
         const pedidoRecoger = pedidos.filter((pedRec)=> pedRec.status === "RECOGER")
         const pedidoEntregado = pedidos.filter((pedEntrega)=> pedEntrega.status === "ENTREGADO")
@@ -56,27 +57,32 @@ router.put('/queue/a-cocina', isAuthenticated, async (req, res)=>{
             text: 'Tu pedido está en Cocina 🧑🏽‍🍳',
             html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
-                <h1 style="text-align: center; color: #ff5722;">¡Tu pedido está en Cocina! 🧑🏽‍🍳</h1>
-                <p style="font-size: 16px; color: #333; text-align: center;">
+                <h1 style="text-align: center; color: #E74C3C; font-size: 24px;">¡Tu pedido está en Cocina! 🧑🏽‍🍳</h1>
+                <p style="font-size: 16px; color: #333; text-align: center; margin-bottom: 20px;">
                     Nuestro equipo está preparando tu pedido con mucho cuidado y estará listo en <strong>15 minutos</strong>.
                 </p>
                 
                 <div style="text-align: center; margin: 20px 0;">
-                    <img src="https://res.cloudinary.com/dt4l2p4pb/image/upload/v1736799141/iek9clhu3zsyeivh3jaj.webp" alt="Preparación en Cocina" style="max-width: 100%; height: auto; border-radius: 10px;" />
+                    <img src="https://res.cloudinary.com/dt4l2p4pb/image/upload/v1736799141/iek9clhu3zsyeivh3jaj.webp" alt="Preparación en Cocina" style="max-width: 100%; height: auto; border-radius: 10px; border: 1px solid #ddd;" />
                 </div>
         
-                <p style="font-size: 16px; color: #333;">Para más detalles sobre tu pedido, puedes hacer clic en el enlace a continuación:</p>
+                <p style="font-size: 16px; color: #333; text-align: center; margin-bottom: 20px;">
+                    Para más detalles sobre tu pedido, haz clic en el botón de abajo:
+                </p>
         
-                <div style="text-align: center; margin: 20px 0;">
-                    <a href="${domain}/carta/info-pedido/${cliente.id}" style="display: inline-block; padding: 10px 20px; background-color: #ff5722; color: white; text-decoration: none; border-radius: 5px; font-size: 16px;">
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${domain}/carta/info-pedido/${cliente.id}" style="display: inline-block; padding: 12px 25px; background-color: #E74C3C; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold;">
                         Ver Detalles del Pedido
                     </a>
                 </div>
         
-                <p style="text-align: center; font-size: 14px; color: #777;">Gracias por elegir nuestro restaurante. ¡Estamos deseando que disfrutes de tu comida! 🍽️</p>
+                <p style="text-align: center; font-size: 14px; color: #777; margin-top: 20px;">
+                    Gracias por elegir nuestro restaurante. ¡Estamos deseando que disfrutes de tu comida! 🍽️
+                </p>
             </div>
-            `
+            `,
         };
+        
         
 
         await transporter.sendMail(mailOptions);

@@ -1,9 +1,104 @@
-<a href="/auth/logout">Cerrar sesión</a>
-{{#if isAdmin}}
-<a href="/order/queue">Cola de pedidos</a>
-<a href="/order/stock">Stock</a>
-<a href="/order/stock/create">Subir producto</a>
-<a href="/auth/create">Crear usuario</a>
-<a href="/auth/users">Ver usuario</a>
-<a href="/carta">Ver Carta</a>
-{{/if}}
+ <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #0D243F;
+      color: #FFFFFF;
+      padding: 1rem 2rem;
+      position: sticky;
+      top:0;
+      width: 100%;
+    }
+
+    .navbar .logo {
+      width: 3rem;
+    }
+
+    .navbar .menu {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .navbar .menu a {
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .navbar .menu a:hover {
+      color: #CDEEF2; 
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: #FFFFFF;
+      margin: 3px 0;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .navbar .menu {
+        display: none;
+        flex-direction: column;
+        background-color: #0D243F;
+        position: absolute;
+        top: 75px;
+        right: 0;
+        width: 100%;
+        padding: 1rem;
+      }
+
+      .navbar .menu.active {
+        display: flex;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+  </style>
+
+ <nav class="navbar">
+    <div class="logo"><img class="logo" src="/img/Logo.png" alt=""></div>
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="menu">
+      <a href="/auth/logout">Cerrar sesión</a>
+      {{#if isAdmin}}
+      <a href="/order/queue">Cola de pedidos</a>
+      <a href="/order/stock">Stock</a>
+      <a href="/order/stock/create">Subir producto</a>
+      <a href="/auth/create">Crear usuario</a>
+      <a href="/auth/users">Ver usuario</a>
+      <a href="/carta">Ver Carta</a>
+      {{/if}}
+    </div>
+  </nav>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.querySelector('.menu');
+      menu.classList.toggle('active');
+    }
+  </script>

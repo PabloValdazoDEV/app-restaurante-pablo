@@ -1,27 +1,30 @@
-<h2>Crear Usuario</h2>
-<form action="/auth/create" method="post" id="form">
+  <div class="create-user-container">
+        <h2 class="titulo">Crear Usuario</h2>
+        <form action="/auth/create" method="post" id="form" class="form-create-user">
 {{> form}}
-<select name="role" id="role">
-    <option value="EMPLOYER">Employer</option>
-    <option value="ADMIN">Admin</option>
-</select>
-<button id="btnCreate" type="submit" disabled>Crear</button>
-</form>
+<div class="form-group">
+                <label for="role">Rol:</label>
+                <select name="role" id="role">
+                    <option value="EMPLOYER">Employer</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+            </div>
+            <button id="btnCreate" type="submit" class="btn" disabled>Crear</button>
+        </form>
+    </div>
 
-<script>
-    const btn = document.getElementById('btnCreate')
-    document.getElementById('form').addEventListener('input', ()=>{
-    let username = document.getElementById('username').value
-    let password = document.getElementById('password').value
+    <script>
+        const btn = document.getElementById('btnCreate');
+        document.getElementById('form').addEventListener('input', () => {
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
 
-    const regex = /^(?=.*[A-Z]).{7,}$/;
+            const regex = /^(?=.*[A-Z]).{7,}$/;
 
-
-    if (regex.test(password) && username && password) {
-        btn.removeAttribute('disabled');
-    } else {
-        btn.setAttribute('disabled', 'true');
-    }
-})
-
-</script>
+            if (regex.test(password) && username && password) {
+                btn.removeAttribute('disabled');
+            } else {
+                btn.setAttribute('disabled', 'true');
+            }
+        });
+    </script>

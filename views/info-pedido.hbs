@@ -1,13 +1,13 @@
-<h1>Info</h1>
+ <div class="info-container">
+        <h1 class="titulo">Información del Pedido</h1>
+        <p><strong>Estado del pedido:</strong> {{pedido.status}}</p>
+        <p><strong>Email asociado al pedido:</strong> {{pedido.email}}</p>
 
-    <p>Estado el pedido: {{pedido.status}}</p>
-    <p>Email asociado al pedido: {{pedido.email}}</p>
-
-
-<p>Has pedido:</p>
-<ul>
-    {{#each pedido.products}}
-    <li>{{product.name}} - Cant. {{quantity}} - {{product.price}}€ /ud</li>
-    {{/each}}
-</ul>
-<p>Total a pagar: <b>{{total}}€</b></p>
+        <p><strong>Has pedido:</strong></p>
+        <ul class="pedido-list">
+            {{#each pedido.products}}
+            <li>{{product.name}} - Cant. {{quantity}} - {{product.price}}€ /ud</li>
+            {{/each}}
+        </ul>
+        <p class="total-pagar"><strong>Total a pagar:</strong> <b>{{total}}€</b></p>
+    </div>

@@ -1,8 +1,17 @@
-<h1>Users</h1>
-
-
-{{#each users}}
-
-<p>{{username}} <a href="/auth/users/{{id}}">Editar</a><form action="/auth/users/delete/{{id}}?_method=DELETE" method="post"><button type="submit">Eliminar</button></form></p>
-
-{{/each}}
+ <div class="usuarios-container">
+        <h1 class="titulo">Usuarios</h1>
+        <div class="usuarios-list">
+            {{#each users}}
+            <div class="usuario-item">
+                <p><strong>Usuario:</strong> {{username}}</p>
+                <p><strong>Rol:</strong> {{role}}</p>
+                <div class="usuario-actions">
+                    <a href="/auth/users/{{id}}" class="btn">Editar</a>
+                    <form action="/auth/users/delete/{{id}}?_method=DELETE" method="post">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>

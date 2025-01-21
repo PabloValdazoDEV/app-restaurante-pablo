@@ -1,24 +1,26 @@
-<h1>Create Product</h1>
-<form action="/order/stock/create" method="POST" enctype="multipart/form-data">
-    <div>
-        <label for="name">Nombre</label>
-        <input id="name" name="name" type="text" required>
+ <div class="create-product-container">
+        <h1 class="titulo">Crear Producto</h1>
+        <form action="/order/stock/create" method="POST" enctype="multipart/form-data" class="form-create-product">
+            <div class="form-group">
+                <label for="name">Nombre</label>
+                <input id="name" name="name" type="text" placeholder="Introduce el nombre del producto" required>
+            </div>
+            <div class="form-group">
+                <label for="image">Imagen</label>
+                <input id="image" name="image" type="file" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Precio</label>
+                <input id="price" name="price" type="number" min="0" step="0.01" placeholder="Introduce el precio" required>
+            </div>
+            <div class="form-group">
+                <label for="stock">Stock</label>
+                <input id="stock" name="stock" type="number" min="1" step="1" placeholder="Cantidad inicial" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Descripción</label>
+                <textarea id="description" name="description" placeholder="Describe el producto" required></textarea>
+            </div>
+            <button type="submit" class="btn">Crear Producto</button>
+        </form>
     </div>
-    <div>
-        <label for="image">Imagen</label>
-        <input id="image" name="image" type="file" accept="image/*" required>
-    </div>
-    <div>
-        <label for="price">Precio</label>
-        <input id="price" name="price" type="number" min="0" step="0.01"  required>
-    </div>
-    <div>
-        <label for="stock">Stock</label>
-        <input id="stock" name="stock" type="number" min="1" step="1" required>
-    </div>
-    <div>
-        <label for="description">Descripción</label>
-        <textarea id="description" name="description" type="" required></textarea>
-    </div>
-    <button type="submit">Subir Producto</button>
-</form>
